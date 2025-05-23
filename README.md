@@ -10,7 +10,7 @@ The **SuperFarmer** is a browser-based version of the board game. Developed in P
 
 ## 🧰 Technologies Used
 
-* **Python 3.13.1+:** Core programming language.
+* **Python 3.12.9+:** Core programming language.
 * **Flask:** Python web framework.
 * **Bootstrap:** CSS framework for responsive design.
 
