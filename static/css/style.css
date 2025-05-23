@@ -1,0 +1,10 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+}
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+#trade-options .btn {
+  font-size: 0.95rem;
+}
