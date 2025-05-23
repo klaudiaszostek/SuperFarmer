@@ -13,6 +13,7 @@ def index():
 @app.route('/roll', methods=['POST'])
 def roll():
     results = roll_dice()
+
     event = player.apply_roll(results)
     return jsonify({
         'dice': results,

@@ -1,61 +1,89 @@
 from game_logic.animals import animal_list, apply_threats
+from game_logic.market import market_rates
+
 
 class Player:
     def __init__(self):
         self.animals = {animal: 0 for animal in animal_list}
-        self.animals["rabbit"] = 1
+        self.animals["królik"] = 1
         self.turn = 1
         self.exchanged_this_turn = False
+        self.main_herd = {
+            "królik": 30,
+            "owca": 20,
+            "świnia": 15,
+            "krowa": 10,
+            "koń": 5,
+            "mały_pies": 5,
+            "duży_pies": 3
+        }
+
 
     def get_animals(self):
         return self.animals
 
-    def apply_roll(self, dice_results):
-        event_log = []
-        event_log += apply_threats(self.animals, dice_results)
 
+    def apply_roll(self, dice_results):
+        log = []
+
+        log += apply_threats(self.animals, dice_results)
+
+        dice_counts = {}
         for animal in dice_results:
-            if animal in self.animals:
-                self.animals[animal] += 1
+            if animal not in dice_counts:
+                dice_counts[animal] = 1
+            else:
+                dice_counts[animal] += 1
+
+        for animal, count_on_dice in dice_counts.items():
+            if animal in ["koń", "krowa"]:
+                continue
+
+            owned = self.animals.get(animal, 0)
+            total = owned + count_on_dice
+
+            if owned > 0:
+                pairs = total // 2
+            else:
+                pairs = 1 if count_on_dice == 2 else 0
+
+            bonus = min(pairs, self.main_herd.get(animal, 0))
+            if bonus > 0:
+                self.animals[animal] += bonus
+                self.main_herd[animal] -= bonus
+                log.append(f"Dostałeś {bonus} {animal}(ów) za {pairs} pełnych par.")
 
         self.exchanged_this_turn = False
         self.turn += 1
-        return event_log
+        return log
+
+
 
     def get_possible_trades(self):
         trades = []
-
-        if self.animals["rabbit"] >= 6:
-            trades.append({"from": "rabbit", "to": "sheep", "cost": 6})
-        if self.animals["sheep"] >= 2:
-            trades.append({"from": "sheep", "to": "pig", "cost": 2})
-        if self.animals["pig"] >= 3:
-            trades.append({"from": "pig", "to": "cow", "cost": 3})
-        if self.animals["cow"] >= 2:
-            trades.append({"from": "cow", "to": "horse", "cost": 2})
+        for rate in market_rates:
+            if self.animals[rate['from']] >= rate['cost']:
+                trades.append(rate)
         return trades
+
 
     def exchange(self, from_animal, to_animal):
         if self.exchanged_this_turn:
             return False, "Możesz wykonać tylko 1 wymianę na turę."
 
-        rates = {
-            ("rabbit", "sheep"): 6,
-            ("sheep", "pig"): 2,
-            ("pig", "cow"): 3,
-            ("cow", "horse"): 2
-        }
+        for rate in market_rates:
+            if rate['from'] == from_animal and rate['to'] == to_animal:
+                if self.animals[from_animal] >= rate['cost']:
+                    self.animals[from_animal] -= rate['cost']
+                    self.animals[to_animal] += 1
+                    self.exchanged_this_turn = True
+                    return True, "Wymiana zakończona sukcesem."
+                else:
+                    return False, "Brak wystarczających zasobów do wymiany."
 
-        if (from_animal, to_animal) in rates:
-            cost = rates[(from_animal, to_animal)]
-            if self.animals[from_animal] >= cost:
-                self.animals[from_animal] -= cost
-                self.animals[to_animal] += 1
-                self.exchanged_this_turn = True
-                return True, "Wymiana zakończona sukcesem."
+        return False, "Taka wymiana nie jest dostępna."
 
-        return False, "Brak wystarczających zasobów do wymiany."
 
     def check_victory(self):
-        required = ["rabbit", "sheep", "pig", "cow", "horse"]
+        required = ["królik", "owca", "świnia", "krowa", "koń"]
         return all(self.animals[animal] >= 1 for animal in required)

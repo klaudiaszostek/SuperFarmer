@@ -1,15 +1,19 @@
 market_rates = [
-    {'from': 'rabbit', 'to': 'sheep', 'cost': 6, 'gain': 1},
-    {'from': 'sheep', 'to': 'pig', 'cost': 2, 'gain': 1},
-    {'from': 'pig', 'to': 'cow', 'cost': 3, 'gain': 1},
-    {'from': 'cow', 'to': 'horse', 'cost': 2, 'gain': 1},
-    {'from': 'sheep', 'to': 'small_dog', 'cost': 1, 'gain': 1},
-    {'from': 'cow', 'to': 'big_dog', 'cost': 1, 'gain': 1},
+    {'from': 'królik', 'to': 'owca', 'cost': 6},
+    {'from': 'owca', 'to': 'królik', 'cost': 1, 'receive': 6},
 
-    {'from': 'sheep', 'to': 'rabbit', 'cost': 1, 'gain': 6},
-    {'from': 'pig', 'to': 'sheep', 'cost': 1, 'gain': 2},
-    {'from': 'cow', 'to': 'pig', 'cost': 1, 'gain': 3},
-    {'from': 'horse', 'to': 'cow', 'cost': 1, 'gain': 2},
-    {'from': 'small_dog', 'to': 'sheep', 'cost': 1, 'gain': 1},
-    {'from': 'big_dog', 'to': 'cow', 'cost': 1, 'gain': 1},
+    {'from': 'owca', 'to': 'świnia', 'cost': 2},
+    {'from': 'świnia', 'to': 'owca', 'cost': 1, 'receive': 2},
+
+    {'from': 'świnia', 'to': 'krowa', 'cost': 3},
+    {'from': 'krowa', 'to': 'świnia', 'cost': 1, 'receive': 3},
+
+    {'from': 'krowa', 'to': 'koń', 'cost': 2},
+    {'from': 'koń', 'to': 'krowa', 'cost': 1, 'receive': 2},
+
+    {'from': 'owca', 'to': 'mały_pies', 'cost': 1},
+    {'from': 'mały_pies', 'to': 'owca', 'cost': 1, 'receive': 1},
+
+    {'from': 'krowa', 'to': 'duży_pies', 'cost': 1},
+    {'from': 'duży_pies', 'to': 'krowa', 'cost': 1, 'receive': 1}
 ]

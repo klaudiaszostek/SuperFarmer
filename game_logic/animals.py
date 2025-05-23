@@ -1,23 +1,23 @@
-animal_list = ["rabbit", "sheep", "pig", "cow", "horse", "small_dog", "big_dog"]
+animal_list = ["królik", "owca", "świnia", "krowa", "koń", "mały_pies", "duży_pies"]
 
 def apply_threats(animals, dice_results):
     log = []
-    if "fox" in dice_results:
-        if animals["small_dog"] > 0:
-            animals["small_dog"] -= 1
+    if "lis" in dice_results:
+        if animals["mały_pies"] > 0:
+            animals["mały_pies"] -= 1
             log.append("Lis został odstraszony przez małego psa.")
         else:
             log.append("Lis pożarł wszystkie króliki!")
-            animals["rabbit"] = 0
+            animals["królik"] = 1
 
-    if "wolf" in dice_results:
-        if animals["big_dog"] > 0:
-            animals["big_dog"] -= 1
+    if "wilk" in dice_results:
+        if animals["duży_pies"] > 0:
+            animals["duży_pies"] -= 1
             log.append("Wilk został odstraszony przez dużego psa.")
         else:
             log.append("Wilk pożarł owce, świnie i krowy!")
-            animals["sheep"] = 0
-            animals["pig"] = 0
-            animals["cow"] = 0
+            animals["owca"] = 0
+            animals["świnia"] = 0
+            animals["krowa"] = 0
 
     return log

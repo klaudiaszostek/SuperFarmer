@@ -34,37 +34,51 @@ function renderTrades(trades) {
     return;
   }
 
+  const animalNames = {
+    rabbit: "królików",
+    sheep: "owiec",
+    pig: "świń",
+    cow: "krów",
+    horse: "koni",
+    small_dog: "małych psów",
+    big_dog: "dużych psów",
+  };
+
   for (const trade of trades) {
+    const cost = trade.cost;
+    const from = trade.from;
+    const to = trade.to;
+    const receive = trade.receive ?? 1;
+
     const btn = $(`
-            <div class="col-6 col-md-4 mb-2">
-                <button class="btn btn-outline-success w-100">
-                    ${trade.cost} ${trade.from} ➡️ 1 ${trade.to}
-                </button>
-            </div>
+          <div class="col-6 col-md-4 mb-2">
+            <button class="btn btn-outline-success w-100">
+              ${cost} ${animalNames[from] || from} ➡️ ${receive} ${
+      animalNames[to] || to
+    }
+            </button>
+          </div>
         `);
+
     btn.click(() => {
       $.ajax({
         url: "/trade",
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify({
-          from: trade.from,
-          to: trade.to,
-        }),
+        data: JSON.stringify({ from, to }),
         success: function (data) {
           for (const [animal, count] of Object.entries(data.animals)) {
             $(`#${animal}-count`).text(count);
           }
           renderTrades(data.trades);
-
           $("#trades-left").text(data.can_trade ? "1" : "0");
+          if (!data.success) {
+            showAlert(data.message);
+          }
         },
       });
     });
+
     container.append(btn);
   }
-}
-
-function showAlert(message) {
-  $("#alert-box").removeClass("d-none").text(message);
 }
