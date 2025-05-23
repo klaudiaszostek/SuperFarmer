@@ -1,6 +1,7 @@
 # 🐰 Superfarmer
 
 The **SuperFarmer** is a browser-based version of the board game. Developed in Python using the Flask framework and styled with Bootstrap, this project allows a player to manage a virtual farm by breeding animals, trading on the market, and protecting the herd from threats.
+
 ## 🎯 Key Features
 
 * **Turn-Based Gameplay:** The player rolls two dice each turn and makes strategic decisions.
